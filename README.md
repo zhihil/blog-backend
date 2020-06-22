@@ -18,7 +18,7 @@ This is the backend for my blogging application. Some planned features for the e
 
 ### Patterns
 Some design patterns and techniques that will be practiced in this project are
-- [ ] - Dependency injection pattern
-- [ ] - Middleware, controllers, services organization
+- [x] - Dependency injection pattern
+- [x] - Middleware, controllers, services organization
 - [ ] - Protecting entire subsets of the API with JWT authorization using as few lines of Express routing as possible
 - [x] - Setting up a TypeScript Express project
