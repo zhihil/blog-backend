@@ -1,4 +1,8 @@
-const serviceMap = {};
+import BlogManager from "./blog";
+
+const serviceMap = {
+    BlogManager: BlogManager
+};
 
 export type ServiceMap = typeof serviceMap;
 

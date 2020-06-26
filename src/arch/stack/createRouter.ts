@@ -1,9 +1,11 @@
 import express from "express";
-import { MiddlewareMap } from "../../core/middlewares";
-import { ControllerMap } from "../../core/controllers";
+import { Middlewares, Controllers } from "../dependencyInjector/types";
+import AuthorRouter from "./route/author";
 
-const createRouter = (middlewares: MiddlewareMap, controllers: ControllerMap) => {
+const createRouter = (middlewares: Middlewares, controllers: Controllers) => {
     const router = express.Router();
+
+    router.use("/", AuthorRouter(middlewares, controllers));
 
     router.get("/is-healthy", (req, res) => {
         res.send("The server is healthy");

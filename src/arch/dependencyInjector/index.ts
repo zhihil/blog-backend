@@ -1,39 +1,56 @@
 
-import { ModelMap } from "../../core/models";
-import { ServiceMap } from "../../core/services";
-import { ControllerMap } from "../../core/controllers";
+import modelMap from "../../core/models";
 import { Models, Services, Middlewares, Controllers, DependencyInjectorConfig } from "./types";
+import _ from 'lodash';
+import BlogManager from "../../core/services/blog";
+import middlewareMap from "../../core/middlewares";
+import controllerMap from "../../core/controllers";
 
 class DependencyInjector {
     static injectDependencies(config: DependencyInjectorConfig) {
-        const models = DependencyInjector.buildModels(config);
-        const services = DependencyInjector.buildServices(config, models);
-        const middlewares = DependencyInjector.buildMiddleware(config, services);
-        const controllers = DependencyInjector.buildControllers(config, services);
+        const models = DependencyInjector.injectModels(config);
+        const services = DependencyInjector.injectServices(config, models);
+        const middlewares = DependencyInjector.injectMiddleware(config, services);
+        const controllers = DependencyInjector.injectController(config, services);
 
         return { middlewares, controllers }
     }
 
-    static buildModels(config: DependencyInjectorConfig): Models {
-        const models = {};
+    static injectModels(config: DependencyInjectorConfig): Models {
+        const models: any = {};
+
+        _.forOwn(modelMap, (Model, modelName) => {
+            models[_.camelCase(modelName)] = new Model;
+        })
 
         return models;
     }
 
-    static buildServices(config: DependencyInjectorConfig, models: ModelMap): Services {
-        const services = {};
+    static injectServices(config: DependencyInjectorConfig, models: Models): Services {
+        const services: Services = {};
+        const dependencies = { ...models };
+
+        services.blog = new BlogManager(dependencies);
 
         return services;
     }
 
-    static buildMiddleware(config: DependencyInjectorConfig, services: ServiceMap): Middlewares {
-        const middleware = {};
+    static injectMiddleware(config: DependencyInjectorConfig, services: Services): Middlewares {
+        const middleware: any= {};
+
+        _.forOwn(middlewareMap, (Middleware, middlewareName) => {
+            middleware[_.camelCase(middlewareName)] = new Middleware();
+        })
 
         return middleware;
     }
 
-    static buildControllers(config: DependencyInjectorConfig, services: ControllerMap): Controllers {
-        const controllers = {};
+    static injectController(config: DependencyInjectorConfig, services: Services): Controllers {
+        const controllers: any = {};
+
+        _.forOwn(controllerMap, (Controller, controllerName) => {
+            controllers[_.camelCase(controllerName)] = new Controller(services);
+        })
         
         return controllers;
     }
