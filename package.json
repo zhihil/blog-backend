@@ -7,12 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts",
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "build-container": "docker build -t blog-backend ."
   },
   "author": "zhihil",
   "license": "ISC",
   "dependencies": {
     "@types/lodash": "^4.14.155",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "lodash": "^4.17.15"
   },
